@@ -56,7 +56,7 @@ Aged Brie, -1, 23
 
 I then made a diagram based on my observations:
 
-![Diagram: how do items update?](./img/Screenshot%202022-02-02%20at%2018.18.20.png)
+![Diagram: how do items update?](./img/Screenshot%202022-02-02%20at%2017.55.12.png)
 
 This helps me figure out a pattern for the udated_quality
 
