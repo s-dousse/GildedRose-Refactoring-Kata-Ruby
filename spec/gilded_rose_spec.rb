@@ -31,17 +31,6 @@ describe GildedRose do
         expect(apple_updated.sell_in).to eq -1
         expect(apple_updated.quality).to eq 1
       end
-
-    #TODO Edge Case => this case should raise an error
-      it "it can't have a quality over 50 to start with" do
-        brie = Item.new('Apple', 3, 60)
-        gilded_rose = GildedRose.new([brie])
-
-        apple_updated = gilded_rose.update_quality[0]
-
-        expect(apple_updated.sell_in).to eq 2
-        expect(apple_updated.quality).to eq 59
-      end
     end
 
     context 'Aged Brie' do
@@ -154,6 +143,36 @@ describe GildedRose do
           expect(items_updated[3].sell_in).to eq 3
           expect(items_updated[3].quality).to eq 23
         end
+      end
+    end
+  end
+
+  describe 'edge cases #initialize' do
+    context "doesn't accept items which quality isn't within the range 0..50" do
+      xit "can't have a quality over 50 to start with" do
+        apple = Item.new('Apple', 10, 60)
+
+        expect { GildedRose.new([apple]) }.to raise_error "quality can't be over 50"
+      end
+
+      xit " can't have a quality over 50 to start with" do
+        brie = Item.new('brie', 10, 60)
+
+        expect { GildedRose.new([brie]) }.to raise_error "quality can't be over 50"
+      end
+    end
+
+    context 'no item can be created with negative value for quality' do
+      xit "it can't have a quality over 50 to start with" do
+        apple = Item.new('Apple', 10, -7)
+
+        expect { GildedRose.new([apple]) }.to raise_error "quality can't be negative"
+      end
+
+      xit "it can't have a quality over 50 to start with" do
+        brie = Item.new('brie', 10, -40)
+
+        expect { GildedRose.new([brie]) }.to raise_error "quality can't be negative"
       end
     end
   end
