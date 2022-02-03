@@ -1,7 +1,7 @@
 require 'gilded_rose'
 
 describe GildedRose do
-  describe '#update_quality' do
+  describe '#update_quality - single item' do
     context 'legendary item' do
       it "doesn't change nor the quality neither the sell_in date" do
         sulfuras = Item.new('Sulfuras, Hand of Ragnaros', 14, 50)
@@ -32,9 +32,8 @@ describe GildedRose do
         expect(apple_updated.quality).to eq 1
       end
 
-
     #TODO Edge Case => this case should raise an error
-      it "it can't have a quality over 50" do
+      it "it can't have a quality over 50 to start with" do
         brie = Item.new('Apple', 3, 60)
         gilded_rose = GildedRose.new([brie])
 
@@ -129,6 +128,32 @@ describe GildedRose do
 
         expect(passes_updated.sell_in).to eq -1
         expect(passes_updated.quality).to eq 0
+      end
+    end
+
+    describe '#update_quality - multiple items' do
+      context 'all four types' do
+        it "updates all items attributes" do
+          sulfuras = Item.new('Sulfuras, Hand of Ragnaros', 4, 20)
+          apple = Item.new('Apple', 4, 20)
+          brie = Item.new('Aged Brie', 4, 20)
+          passes = Item.new('Backstage passes to a TAFKAL80ETC concert', 4, 20)
+          gilded_rose = GildedRose.new([sulfuras, apple, brie, passes])
+
+          items_updated = gilded_rose.update_quality
+
+          expect(items_updated[0].sell_in).to eq 4
+          expect(items_updated[0].quality).to eq 20
+
+          expect(items_updated[1].sell_in).to eq 3
+          expect(items_updated[1].quality).to eq 19
+
+          expect(items_updated[2].sell_in).to eq 3
+          expect(items_updated[2].quality).to eq 21
+
+          expect(items_updated[3].sell_in).to eq 3
+          expect(items_updated[3].quality).to eq 23
+        end
       end
     end
   end
