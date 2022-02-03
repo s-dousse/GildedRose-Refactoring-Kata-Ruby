@@ -70,5 +70,66 @@ describe GildedRose do
         expect(brie_updated.quality).to eq 50
       end
     end
+
+    context 'Backstage Passes, until the concert' do
+      it "increases the quality by 1 if we are 11 or more days before the concert" do
+        passes = Item.new('Backstage passes to a TAFKAL80ETC concert', 11, 20)
+        gilded_rose = GildedRose.new([passes])
+        passes_updated = gilded_rose.update_quality[0]
+
+        expect(passes_updated.sell_in).to eq 10
+        expect(passes_updated.quality).to eq 21
+      end
+
+      it "increases the quality by 2 if we are 10 or less days before the concert" do
+        passes = Item.new('Backstage passes to a TAFKAL80ETC concert', 10, 20)
+        gilded_rose = GildedRose.new([passes])
+
+        passes_updated = gilded_rose.update_quality[0]
+
+        expect(passes_updated.sell_in).to eq 9
+        expect(passes_updated.quality).to eq 22
+      end
+    
+      it "increases the quality by 3 if we are 5 or less days before the concert" do
+        passes = Item.new('Backstage passes to a TAFKAL80ETC concert', 5, 20)
+        gilded_rose = GildedRose.new([passes])
+
+        passes_updated = gilded_rose.update_quality[0]
+
+        expect(passes_updated.sell_in).to eq 4
+        expect(passes_updated.quality).to eq 23
+      end
+  
+      it "it can't have a quality over 50" do
+        passes = Item.new('Backstage passes to a TAFKAL80ETC concert', 2, 49)
+        gilded_rose = GildedRose.new([passes])
+
+        passes_updated = gilded_rose.update_quality[0]
+
+        expect(passes_updated.sell_in).to eq 1
+        expect(passes_updated.quality).to eq 50
+      end
+
+      it "increases the quality by 3 on the day of the concert" do
+        passes = Item.new('Backstage passes to a TAFKAL80ETC concert', 1, 20)
+        gilded_rose = GildedRose.new([passes])
+
+        passes_updated = gilded_rose.update_quality[0]
+
+        expect(passes_updated.sell_in).to eq 0
+        expect(passes_updated.quality).to eq 23
+      end
+      
+      it "loses all quality after the concert" do
+        passes = Item.new('Backstage passes to a TAFKAL80ETC concert', 0, 30)
+        gilded_rose = GildedRose.new([passes])
+
+        passes_updated = gilded_rose.update_quality[0]
+
+        expect(passes_updated.sell_in).to eq -1
+        expect(passes_updated.quality).to eq 0
+      end
+    end
   end
 end
