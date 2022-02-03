@@ -32,5 +32,31 @@ describe GildedRose do
         expect(apple_updated.quality).to eq 1
       end
     end
+
+    context 'Aged Brie' do
+      brie = Item.new('Aged Brie', 1, 47)
+      gilded_rose = GildedRose.new([brie])
+
+      it "increases the quality by 1 before sell by date" do
+        brie_updated = gilded_rose.update_quality[0]
+
+        expect(brie_updated.sell_in).to eq 0
+        expect(brie_updated.quality).to eq 48
+      end
+
+      it "increases the quality by 2 when sell by date is passed" do
+        brie_updated = gilded_rose.update_quality[0]
+
+        expect(brie_updated.sell_in).to eq -1
+        expect(brie_updated.quality).to eq 50
+      end
+
+      it "it can't have a quality over 50" do
+        brie_updated = gilded_rose.update_quality[0]
+
+        expect(brie_updated.sell_in).to eq -2
+        expect(brie_updated.quality).to eq 50
+      end
+    end
   end
 end
