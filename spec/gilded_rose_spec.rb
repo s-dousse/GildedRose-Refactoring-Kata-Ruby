@@ -31,6 +31,18 @@ describe GildedRose do
         expect(apple_updated.sell_in).to eq -1
         expect(apple_updated.quality).to eq 1
       end
+
+
+    #TODO Edge Case => this case should raise an error
+      it "it can't have a quality over 50" do
+        brie = Item.new('Apple', 3, 60)
+        gilded_rose = GildedRose.new([brie])
+
+        apple_updated = gilded_rose.update_quality[0]
+
+        expect(apple_updated.sell_in).to eq 2
+        expect(apple_updated.quality).to eq 59
+      end
     end
 
     context 'Aged Brie' do
