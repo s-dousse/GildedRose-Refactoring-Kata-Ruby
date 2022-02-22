@@ -11,22 +11,22 @@ class GildedRose
   def update_quality
     @items.each_with_index do |item, i|
       unless item.name == 'Sulfuras, Hand of Ragnaros'
-        if updatable?(i)
+        if item.sell_in > 0 && updatable?(i)
           case item.name
             when 'Aged Brie'
-              item.quality += 1
+              increase_quality(i)
             when 'Backstage passes to a TAFKAL80ETC concert'
-              item.quality += 1
-              item.quality += 1 if item.sell_in < 11 && updatable?(i)
-              item.quality += 1 if item.sell_in < 6  && updatable?(i)
+              if item.sell_in < 6
+                item.quality < 48 ? increase_quality(i, 3) : set_max_quality(i)
+              elsif item.sell_in < 11
+                item.quality < 49 ? increase_quality(i, 2) : set_max_quality(i)
+              else
+                increase_quality(i)
+              end
             else
-              item.quality -= 1
+              decrease_quality(i)
             end
-        end
-          
-        item.sell_in -= 1
-
-          if item.sell_in < 0 && updatable?(i)
+          elsif updatable?(i)
             case item.name
               when 'Aged Brie'
                 item.quality += 1
@@ -34,12 +34,28 @@ class GildedRose
               when 'Backstage passes to a TAFKAL80ETC concert'
                 item.quality -= item.quality
               else
-                item.quality -= 1
+                decrease_quality(i, 2)
             end
-          end
-
+        end
+        item.sell_in -= 1
       end
     end
+  end
+
+  def lose_all_quality(i)
+    @items[i].quality = 0
+  end
+
+  def set_max_quality(i)
+    @items[i].quality = 50
+  end
+
+  def increase_quality(index, num = 1)
+    @items[index].quality += num
+  end
+
+  def decrease_quality(index, num = 1)
+    @items[index].quality -= num
   end
 
   def updatable?(i)
