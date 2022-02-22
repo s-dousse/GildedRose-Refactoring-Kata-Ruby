@@ -23,18 +23,21 @@ class GildedRose
               else
                 increase_quality(i)
               end
+            when 'Conjured Item'
+              item.quality < 49 ? decrease_quality(i, 2) : lose_all_quality(i)
             else
               decrease_quality(i)
             end
           elsif updatable?(i)
             case item.name
               when 'Aged Brie'
-                item.quality += 1
-                item.quality += 1 if updatable?(i)
+                increase_quality(i, 2) if item.quality < 50
               when 'Backstage passes to a TAFKAL80ETC concert'
-                item.quality -= item.quality
+                lose_all_quality(i)
+              when 'Conjured Item'
+                item.quality > 4 ? decrease_quality(i, 4) : lose_all_quality(i)
               else
-                decrease_quality(i, 2)
+                item.quality < 49 ? decrease_quality(i, 2) : lose_all_quality(i)
             end
         end
         item.sell_in -= 1

@@ -212,4 +212,29 @@ describe GildedRose do
       end
     end
   end
+
+  context 'Conjured Item' do
+      conjured = Item.new('Conjured Item', 1, 9)
+      gilded_rose = GildedRose.new([conjured])
+
+      it 'decrease the quality by 2 before sell by date' do
+        conjured_updated = gilded_rose.update_quality[0]
+        expect(conjured_updated.sell_in).to eq 0
+        expect(conjured_updated.quality).to eq 7
+      end
+
+      it 'decrease the quality by 4 when sell by date is passed' do
+        conjured_updated = gilded_rose.update_quality[0]
+
+        expect(conjured_updated.sell_in).to eq -1
+        expect(conjured_updated.quality).to eq 3
+      end
+
+      it "quality can't be negative" do
+       conjured_updated = gilded_rose.update_quality[0]
+
+        expect(conjured_updated.sell_in).to eq -2
+        expect(conjured_updated.quality).to eq 0
+      end
+    end
 end
