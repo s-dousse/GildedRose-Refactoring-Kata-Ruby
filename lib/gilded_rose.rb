@@ -1,39 +1,49 @@
 class GildedRose
   attr_reader :name, :sell_in, :quality
+
+  MIN_QUALITY = 0;
+  MAX_QUALITY = 50;
+
   def initialize(items)
     @items = items
   end
 
   def update_quality
-    @items.each do |item|
+    @items.each_with_index do |item, i|
       unless item.name == 'Sulfuras, Hand of Ragnaros'
+        if updatable?(i)
           case item.name
             when 'Aged Brie'
-              item.quality += 1 if (item.quality < 50)
+              item.quality += 1
             when 'Backstage passes to a TAFKAL80ETC concert'
-              item.quality += 1 if (item.quality < 50)
-              item.quality += 1 if item.sell_in < 11 && (item.quality < 50)
-              item.quality += 1 if item.sell_in < 6 && (item.quality < 50)
-            else # normal items
-              item.quality -= 1 if item.quality > 0
-          end
-        # a day passes
-        item.sell_in -= 1
-        
-        # if sell_by date is passed
-        if item.sell_in < 0
-          case item.name
-            when 'Aged Brie'
-              item.quality += 1 if (item.quality < 50)
-              item.quality += 1 if (item.quality < 49)
-            when 'Backstage passes to a TAFKAL80ETC concert'
-              item.quality -= item.quality
-            else # normal items
-              item.quality -= 1 if item.quality > 0
-          end
+              item.quality += 1
+              item.quality += 1 if item.sell_in < 11 && updatable?(i)
+              item.quality += 1 if item.sell_in < 6  && updatable?(i)
+            else
+              item.quality -= 1
+            end
         end
-        # end of if sell_by date is passed
+          
+        item.sell_in -= 1
+
+          if item.sell_in < 0 && updatable?(i)
+            case item.name
+              when 'Aged Brie'
+                item.quality += 1
+                item.quality += 1 if updatable?(i)
+              when 'Backstage passes to a TAFKAL80ETC concert'
+                item.quality -= item.quality
+              else
+                item.quality -= 1
+            end
+          end
+
       end
     end
   end
+
+  def updatable?(i)
+    @items[i].quality > MIN_QUALITY && @items[i].quality < MAX_QUALITY
+  end
 end
+
