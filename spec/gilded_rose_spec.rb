@@ -5,7 +5,7 @@ describe GildedRose do
   describe '#update_quality - single item' do
     context 'legendary item' do
       it "doesn't change nor the quality neither the sell_in date" do
-        sulfuras = Item.new('Sulfuras, Hand of Ragnaros', 14, 50)
+       sulfuras = Item.new('Sulfuras, Hand of Ragnaros', 14, 50)
         gilded_rose = GildedRose.new([sulfuras])
 
         sulfuras_updated = gilded_rose.update_quality[0]
@@ -77,7 +77,7 @@ describe GildedRose do
         expect(passes_updated.quality).to eq 50
       end
 
-      it "it can't have a quality over 50" do
+      it "can't have a quality over 50" do
 
         passes_updated = gilded_rose.update_quality[0]
 
@@ -100,7 +100,7 @@ describe GildedRose do
         expect(passes_updated.quality).to eq 50
       end
 
-      it "it can't have a quality over 50" do
+      it "can't have a quality over 50" do
         passes_updated = gilded_rose.update_quality[0]
 
         expect(passes_updated.sell_in).to eq 8
@@ -119,7 +119,7 @@ describe GildedRose do
         expect(passes_updated.quality).to eq 48
       end
 
-      it "it can't have a quality over 50" do
+      it "can't have a quality over 50" do
         passes_updated = gilded_rose.update_quality[0]
 
         expect(passes_updated.sell_in).to eq 3
@@ -145,7 +145,7 @@ describe GildedRose do
         expect(passes_updated.quality).to eq 0
       end
 
-      it "it can't have a quality over 50" do
+      it "can't have a quality over 50" do
         passes = Item.new('Backstage passes to a TAFKAL80ETC concert', 1, 48)
         gilded_rose = GildedRose.new([passes])
 
@@ -158,7 +158,7 @@ describe GildedRose do
 
     describe '#update_quality - multiple items' do
       context 'all four types' do
-        xit "updates all items attributes" do
+        it "updates all items attributes" do
           sulfuras = Item.new('Sulfuras, Hand of Ragnaros', 4, 20)
           apple = Item.new('Apple', 4, 20)
           brie = Item.new('Aged Brie', 4, 20)
@@ -199,7 +199,7 @@ describe GildedRose do
     end
 
     context 'no item can be created with negative value for quality' do
-      xit "it can't have a quality over 50 to start with" do
+      xit "can't have a quality over 50 to start with" do
         apple = Item.new('Apple', 10, -7)
 
         expect { GildedRose.new([apple]) }.to raise_error "quality can't be negative"
